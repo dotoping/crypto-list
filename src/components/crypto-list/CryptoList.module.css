@@ -1,0 +1,67 @@
+.crypto_lists {
+    width: 100%;
+}
+
+.header {
+    /* display: flex;
+    flex-direction: row;
+    justify-content: space-between; */
+    overflow-x: hidden;
+    padding-left: 0px;
+    padding-right: 0px;
+    /* position: absolute; */
+    margin-top: 0px;
+    top: 0px;
+    /* z-index: 1001; */
+    /* will-change: transform;
+    transform: translateX(0px) translateY(95px); */
+    left: 0px;
+    /* width: 1270px; */
+}
+
+.body {
+    overflow-y: hidden;
+    table-layout: fixed;
+    /* min-width: 1270px; */
+}
+
+table tbody tr {
+    height: 35px;
+    max-height: 35px;
+    overflow: hidden;
+}
+
+table {
+    border-collapse: collapse;
+    text-indent: initial;
+    border-spacing: 2px;
+    color: #212529;
+    width: 100%;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+td {
+    text-align: center;
+}
+
+.name {
+    text-align: left;
+    padding-left: 50px;
+}

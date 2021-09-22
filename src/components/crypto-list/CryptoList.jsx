@@ -1,49 +1,38 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
-import {Paging} from '../pagination/Paging';
+import Paging from '../pagination/Paging';
+
+import styles from './CryptoList.module.css'
 
 function CryptoList() {
 
-    const [lists, setLists] = useState(null);
+    const [lists, setLists] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [totalCount, setTotalCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [listsPerPage, setListsPerPage] = useState(50);
 
     //paginated
     const totalLists = totalCount.length;
-    const perPage = 100;
     const page = currentPage;
-    const totalPages = Math.ceil(totalLists / perPage);
+    const totalPages = Math.ceil(totalLists / listsPerPage);
+    
 
     useEffect(() => {
+        
         const fetchListTotal = async () => {
             try {
+                setError(null);
+                setTotalCount([]);
+
+                setLoading(true);
                 const totalLists = await axios.get(
                     "https://api.coingecko.com/api/v3/coins/list?include_platform=false"
                 );
 
                 setTotalCount(totalLists.data);
 
-                const fetchList = async () => {
-                    try {
-                        setError(null);
-                        setLists(null);
-
-                        setLoading(true);
-                        const response = await axios.get(
-                            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&
-                    order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=false`
-                        );
-
-                        setLists(response.data);
-                    } catch (e) {
-                        setError(e);
-                    }
-                    setLoading(false);
-                };
-
-                fetchList();
             } catch (e) {
                 setError(e)
             }
@@ -53,6 +42,28 @@ function CryptoList() {
 
     }, []);
 
+    useEffect(() => {
+        const fetchList = async () => {
+            try {
+                setError(null);
+                setLists([]);
+
+
+                const response = await axios.get(
+                    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&
+                    order=market_cap_desc&per_page=${listsPerPage}&page=${currentPage}&sparkline=false`
+                );
+
+                setLists(response.data);
+            } catch (e) {
+                setError(e);
+            }
+            setLoading(false);
+        };
+
+        fetchList();
+    },[currentPage])
+
     if (loading) 
         return <div>loading...</div>;
     if (error) 
@@ -61,12 +72,12 @@ function CryptoList() {
         return null;
     
     return (
-        <div>
+        <div className={styles.crypto_lists}>
             <table>
-                <thead>
+                <thead className={styles.header}>
                     <tr>
                         <th>
-                            # {totalLists}
+                            #
                         </th>
                         <th>
                             Coin
@@ -82,12 +93,12 @@ function CryptoList() {
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className={styles.body}>
                     {
                         lists.map((list, index) => (
                             <tr key={list.id}>
-                                <td>{(index + 1) + (perPage * (page - 1))}</td>
-                                <td><img src={list.image} width="15px" alt={list.symbol}/> {list.name}</td>
+                                <td className={styles.index}>{(index + 1) + (listsPerPage * (currentPage - 1))}</td>
+                                <td className={styles.name}><img src={list.image} width="15px" alt={list.symbol}/> {list.name}</td>
                                 <td>${
                                         list
                                             .current_price
@@ -105,10 +116,11 @@ function CryptoList() {
                 </tbody>
             </table>
             <Paging
-                setCurrentPage={setCurrentPage}
-                page={page}
-                perPage={perPage}
-                totalPages={totalPages}/>
+                listsPerPage={listsPerPage}
+                paginate={setCurrentPage}
+                totalLists={totalLists}
+                page={currentPage}
+            />
         </div>
     );
 }

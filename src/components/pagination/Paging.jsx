@@ -3,19 +3,28 @@ import Pagination from 'react-js-pagination'
 
 import './Paging.css'
 
-export const Paging = ({ page, perPage, totalPages, setCurrentPage}) => {
-    // const [page, setPage] = useState(1);
+
+
+const Paging = ({ listsPerPage, totalLists, paginate, page}) => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(totalLists / listsPerPage); i++){
+        pageNumbers.push(i);
+    }
     const handlePageChange = (page) => {
-        setCurrentPage(page);
+        paginate(page);
     };
     return (
         <Pagination
             activePage={page}
-            itemsCountPerPage={perPage}
-            totalItemsCount={450}
+            itemsCountPerPage={listsPerPage}
+            totalItemsCount={totalLists}
             pageRangeDisplayed={10}
             prevPageText={"‹"}
             nextPageText={"›"}
-            onChange={handlePageChange}/>
+                onChange={handlePageChange} />
+            
     );
 };
+
+
+export default Paging;

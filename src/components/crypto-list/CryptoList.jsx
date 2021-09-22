@@ -51,7 +51,7 @@ function CryptoList() {
 
                 const response = await axios.get(
                     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&
-                    order=market_cap_desc&per_page=${listsPerPage}&page=${currentPage}&sparkline=false`
+                    order=name&per_page=${listsPerPage}&page=${currentPage}&sparkline=false`
                 );
 
                 setLists(response.data);
@@ -98,7 +98,7 @@ function CryptoList() {
                         lists.map((list, index) => (
                             <tr key={list.id}>
                                 <td className={styles.index}>{(index + 1) + (listsPerPage * (currentPage - 1))}</td>
-                                <td className={styles.name}><img src={list.image} width="15px" alt={list.symbol}/> {list.name}</td>
+                                <td><img src={list.image} width="15px" alt={list.symbol}/> {list.name}</td>
                                 <td>${
                                         list
                                             .current_price
@@ -108,11 +108,10 @@ function CryptoList() {
                                 <td>${Number(list.total_volume).toLocaleString('en-US')}</td>
                                 <td>${Number(list.market_cap).toLocaleString('en-US')}</td>
                             </tr>
+                            
                         ))
                     }
-                    <tr>
-                        <td></td>
-                    </tr>
+                   
                 </tbody>
             </table>
             <Paging

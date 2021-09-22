@@ -58,10 +58,10 @@ tr {
 }
 
 td {
-    text-align: center;
+    text-align: left;
+    font-size: small;
 }
 
-.name {
-    text-align: left;
-    padding-left: 50px;
+.index {
+    text-align: center;
 }

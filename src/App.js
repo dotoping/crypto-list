@@ -1,6 +1,6 @@
 import './App.css';
-import CryptoList from './components/CryptoList';
-import { Footer } from './components/Footer';
+import CryptoList from './components/crypto-list/CryptoList';
+import { Footer } from './components/footer/Footer';
 
 
 function App() {

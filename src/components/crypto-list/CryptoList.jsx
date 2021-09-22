@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
-import PaginationOutput from './PaginationOutput';
+import {Paging} from '../pagination/Paging';
 
 function CryptoList() {
 
@@ -8,17 +8,20 @@ function CryptoList() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [totalCount, setTotalCount] = useState(0);
-    
+    const [currentPage, setCurrentPage] = useState(1);
+
     //paginated
     const totalLists = totalCount.length;
     const perPage = 100;
-    const page = 1;
+    const page = currentPage;
     const totalPages = Math.ceil(totalLists / perPage);
 
     useEffect(() => {
         const fetchListTotal = async () => {
             try {
-                const totalLists = await axios.get("https://api.coingecko.com/api/v3/coins/list?include_platform=false");
+                const totalLists = await axios.get(
+                    "https://api.coingecko.com/api/v3/coins/list?include_platform=false"
+                );
 
                 setTotalCount(totalLists.data);
 
@@ -48,7 +51,6 @@ function CryptoList() {
 
         fetchListTotal();
 
-        
     }, []);
 
     if (loading) 
@@ -84,7 +86,7 @@ function CryptoList() {
                     {
                         lists.map((list, index) => (
                             <tr key={list.id}>
-                                <td>{(index + 1) + (perPage * (page -1))}</td>
+                                <td>{(index + 1) + (perPage * (page - 1))}</td>
                                 <td><img src={list.image} width="15px" alt={list.symbol}/> {list.name}</td>
                                 <td>${
                                         list
@@ -102,7 +104,11 @@ function CryptoList() {
                     </tr>
                 </tbody>
             </table>
-            <PaginationOutput totalPages={totalPages}/>
+            <Paging
+                setCurrentPage={setCurrentPage}
+                page={page}
+                perPage={perPage}
+                totalPages={totalPages}/>
         </div>
     );
 }
